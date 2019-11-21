@@ -79,23 +79,9 @@ class image_converter:
     # centres of blobs
     center = a * self.detect_yellow(image)
     circle1 = a * self.detect_yellow(image) 
-<<<<<<< HEAD
-    circle2 = a * self.detect_blue(image) 
-    circle3 = a * self.detect_green(image)
-
-    T_theta = [[math.cos(theta), -math.sin(theta), 0, 0],
-               [math.sin(theta), math.cos(theta), 0, 0],
-               [0, 0, 1, 0],
-               [0, 0, 0, 1]]
-    
-
-
-    
-=======
     circle2 = a * self.detect_blue(image)
     circle3 = a * self.detect_blue(image) 
     circle4 = a * self.detect_green(image)
->>>>>>> b0503577e1561135708e17cdabbbb06799bfa119
     ja1 = np.arctan2(center[0]- circle1[0], center[1] - circle1[1])
     ja2 = np.arctan2(circle1[0]-circle2[0], circle1[1]-circle2[1]) - ja1
     ja3 = np.arctan2(circle1[0]-circle12[0], circle1[1]-circle2[1]) - ja1s
@@ -156,52 +142,6 @@ class image_converter:
     except CvBridgeError as e:
       print(e)
 
-<<<<<<< HEAD
-# ////////////////////////////////////////////////////////////////
- 
-# //////////////       INVERSE KINEMATICS         ////////////////
-
-def forward_kinematics(self, image):
-  joints = self.detect_joint_angles(image)
-  end_effector = np.array([3 * np.sin(joints[0]) + 
-                          3 * np.sin(joints[0] + joints[1]) + 3 * np.sin(joints.sum()),
-                          3 * np.cos(joints[0]) + 3 * np.cos(joints[0] + joints[1]) +
-                          3 * np.cos(joints.sum()))
-      
-  return end_effector
-
-  
-
-#////////////////////////////////////////////////////////////////
-# def callback(self,data):
-#     # Recieve the image
-#     try:
-#       cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
-#     except CvBridgeError as e:
-#       print(e)
-    
-#     # Perform image processing task (your code goes here)
-#     # The image is loaded as cv_imag
-
-#     # Uncomment if you want to save the image
-#     #cv2.imwrite('image_copy.png', cv_image)
-
-#     a = self.detect_joint_angles(cv_image)
-#     cv2.imshow('window', cv_image)
-#     cv2.waitKey(3)
-
-#     self.joints = Float64MultiArray()
-#     self.joints.data = a
-
-#     # Publish the results
-#     try:
-#       self.image_pub.publish(self.bridge.cv2_to_imgmsg(cv_image, "bgr8"))
-#       self.joints_pub.publish(self.joints)
-#     except CvBridgeError as e:
-#       print(e)
-#////////////////////////////////////////////////////////
-=======
->>>>>>> b0503577e1561135708e17cdabbbb06799bfa119
 
 # call the class
 def main(args):
