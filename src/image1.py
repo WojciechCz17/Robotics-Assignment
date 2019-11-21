@@ -79,6 +79,7 @@ class image_converter:
     # centres of blobs
     center = a * self.detect_yellow(image)
     circle1 = a * self.detect_yellow(image) 
+<<<<<<< HEAD
     circle2 = a * self.detect_blue(image) 
     circle3 = a * self.detect_green(image)
 
@@ -90,10 +91,43 @@ class image_converter:
 
 
     
+=======
+    circle2 = a * self.detect_blue(image)
+    circle3 = a * self.detect_blue(image) 
+    circle4 = a * self.detect_green(image)
+>>>>>>> b0503577e1561135708e17cdabbbb06799bfa119
     ja1 = np.arctan2(center[0]- circle1[0], center[1] - circle1[1])
     ja2 = np.arctan2(circle1[0]-circle2[0], circle1[1]-circle2[1]) - ja1
-    ja3 = np.arctan2(circle2[0]-circle3[0], circle2[1]-circle3[1]) - ja2 - ja1
-    return np.array([ja1, ja2, ja3])
+    ja3 = np.arctan2(circle1[0]-circle12[0], circle1[1]-circle2[1]) - ja1s
+    ja4 = np.arctan2(circle2[0]-circle3[0], circle2[1]-circle3[1]) - ja2 - ja1
+    return np.array([ja1, ja2, ja3, ja4])
+
+  def CalcuateRotationMatrix(theta) :
+     
+    Rx = np.array([[1,         0,                  0                   ],
+                    [0,         math.cos(theta[1]), -math.sin(theta[1]) ],
+                    [0,         math.sin(theta[1]), math.cos(theta[1])  ]
+                    ])
+
+     Rx2 = np.array([[1,         0,                  0                   ],
+                    [0,         math.cos(theta[3]), -math.sin(theta[3]) ],
+                    [0,         math.sin(theta[3]), math.cos(theta[3])  ]
+                    ])
+                     
+    Ry = np.array([[math.cos(theta[2]),    0,      math.sin(theta[2])  ],
+                    [0,                     1,      0                   ],
+                    [-math.sin(theta[2]),   0,      math.cos(theta[2])  ]
+                    ])
+                 
+    Rz = np.array([[math.cos(theta[0]),    -math.sin(theta[0]),    0],
+                    [math.sin(theta[0]),    math.cos(theta[0]),     0],
+                    [0,                     0,                      1]
+                    ])
+                     
+                     
+    R = np.dot(Rz, np.dot( Rx, np.dot ( Ry, Rx ))
+ 
+    return R
 
 
 #////////////
@@ -122,6 +156,7 @@ class image_converter:
     except CvBridgeError as e:
       print(e)
 
+<<<<<<< HEAD
 # ////////////////////////////////////////////////////////////////
  
 # //////////////       INVERSE KINEMATICS         ////////////////
@@ -165,6 +200,8 @@ def forward_kinematics(self, image):
 #     except CvBridgeError as e:
 #       print(e)
 #////////////////////////////////////////////////////////
+=======
+>>>>>>> b0503577e1561135708e17cdabbbb06799bfa119
 
 # call the class
 def main(args):
