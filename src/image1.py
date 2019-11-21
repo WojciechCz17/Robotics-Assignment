@@ -87,32 +87,32 @@ class image_converter:
     ja4 = np.arctan2(circle2[0]-circle3[0], circle2[1]-circle3[1]) - ja2 - ja1
     return np.array([ja1, ja2, ja3, ja4])
 
-  def CalcuateRotationMatrix(theta) :
+  # def CalcuateRotationMatrix(theta) :
      
-    Rx = np.array([[1,         0,                  0                   ],
-                    [0,         math.cos(theta[1]), -math.sin(theta[1]) ],
-                    [0,         math.sin(theta[1]), math.cos(theta[1])  ]
-                    ])
+  #   Rx = np.array([[1,0,0 ],
+  #                   [0, math.cos(theta[1]), -math.sin(theta[1]) ],
+  #                   [0, math.sin(theta[1]), math.cos(theta[1])  ]
+  #                   ])
 
-     Rx2 = np.array([[1,         0,                  0                   ],
-                    [0,         math.cos(theta[3]), -math.sin(theta[3]) ],
-                    [0,         math.sin(theta[3]), math.cos(theta[3])  ]
-                    ])
+  #    Rx2 = np.array([[1,         0,                  0                   ],
+  #                   [0,         math.cos(theta[3]), -math.sin(theta[3]) ],
+  #                   [0,         math.sin(theta[3]), math.cos(theta[3])  ]
+  #                   ])
                      
-    Ry = np.array([[math.cos(theta[2]),    0,      math.sin(theta[2])  ],
-                    [0,                     1,      0                   ],
-                    [-math.sin(theta[2]),   0,      math.cos(theta[2])  ]
-                    ])
+  #   Ry = np.array([[math.cos(theta[2]),    0,      math.sin(theta[2])  ],
+  #                   [0,                     1,      0                   ],
+  #                   [-math.sin(theta[2]),   0,      math.cos(theta[2])  ]
+  #                   ])
                  
-    Rz = np.array([[math.cos(theta[0]),    -math.sin(theta[0]),    0],
-                    [math.sin(theta[0]),    math.cos(theta[0]),     0],
-                    [0,                     0,                      1]
-                    ])
+  #   Rz = np.array([[math.cos(theta[0]),    -math.sin(theta[0]),    0],
+  #                   [math.sin(theta[0]),    math.cos(theta[0]),     0],
+  #                   [0,                     0,                      1]
+  #                   ])
                      
                      
-    R = np.dot(Rz, np.dot( Rx, np.dot ( Ry, Rx ))
+  #   R = np.dot(Rz, np.dot( Rx, np.dot ( Ry, Rx ))
  
-    return R
+  #   return R
 
 
 #////////////
