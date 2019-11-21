@@ -78,12 +78,41 @@ class image_converter:
     a = self.pixel2meter(image)
     center = a * self.detect_yellow(image)
     circle1 = a * self.detect_yellow(image) 
-    circle2 = a * self.detect_blue(image) 
-    circle3 = a * self.detect_green(image)
+    circle2 = a * self.detect_blue(image)
+    circle3 = a * self.detect_blue(image) 
+    circle4 = a * self.detect_green(image)
     ja1 = np.arctan2(center[0]- circle1[0], center[1] - circle1[1])
     ja2 = np.arctan2(circle1[0]-circle2[0], circle1[1]-circle2[1]) - ja1
-    ja3 = np.arctan2(circle2[0]-circle3[0], circle2[1]-circle3[1]) - ja2 - ja1
-    return np.array([ja1, ja2, ja3])
+    ja3 = np.arctan2(circle1[0]-circle12[0], circle1[1]-circle2[1]) - ja1s
+    ja4 = np.arctan2(circle2[0]-circle3[0], circle2[1]-circle3[1]) - ja2 - ja1
+    return np.array([ja1, ja2, ja3, ja4])
+
+  def CalcuateRotationMatrix(theta) :
+     
+    Rx = np.array([[1,         0,                  0                   ],
+                    [0,         math.cos(theta[1]), -math.sin(theta[1]) ],
+                    [0,         math.sin(theta[1]), math.cos(theta[1])  ]
+                    ])
+
+     Rx2 = np.array([[1,         0,                  0                   ],
+                    [0,         math.cos(theta[3]), -math.sin(theta[3]) ],
+                    [0,         math.sin(theta[3]), math.cos(theta[3])  ]
+                    ])
+                     
+    Ry = np.array([[math.cos(theta[2]),    0,      math.sin(theta[2])  ],
+                    [0,                     1,      0                   ],
+                    [-math.sin(theta[2]),   0,      math.cos(theta[2])  ]
+                    ])
+                 
+    Rz = np.array([[math.cos(theta[0]),    -math.sin(theta[0]),    0],
+                    [math.sin(theta[0]),    math.cos(theta[0]),     0],
+                    [0,                     0,                      1]
+                    ])
+                     
+                     
+    R = np.dot(Rz, np.dot( Rx, np.dot ( Ry, Rx ))
+ 
+    return R
 
 
 #////////////
@@ -112,34 +141,6 @@ class image_converter:
     except CvBridgeError as e:
       print(e)
 
-#///////////////////////////////////////////////////////
-# def callback(self,data):
-#     # Recieve the image
-#     try:
-#       cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
-#     except CvBridgeError as e:
-#       print(e)
-    
-#     # Perform image processing task (your code goes here)
-#     # The image is loaded as cv_imag
-
-#     # Uncomment if you want to save the image
-#     #cv2.imwrite('image_copy.png', cv_image)
-
-#     a = self.detect_joint_angles(cv_image)
-#     cv2.imshow('window', cv_image)
-#     cv2.waitKey(3)
-
-#     self.joints = Float64MultiArray()
-#     self.joints.data = a
-
-#     # Publish the results
-#     try:
-#       self.image_pub.publish(self.bridge.cv2_to_imgmsg(cv_image, "bgr8"))
-#       self.joints_pub.publish(self.joints)
-#     except CvBridgeError as e:
-#       print(e)
-#////////////////////////////////////////////////////////
 
 # call the class
 def main(args):
