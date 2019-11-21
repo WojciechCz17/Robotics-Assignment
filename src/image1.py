@@ -76,10 +76,20 @@ class image_converter:
 
   def detect_joint_angles(self,image):
     a = self.pixel2meter(image)
+    # centres of blobs
     center = a * self.detect_yellow(image)
     circle1 = a * self.detect_yellow(image) 
     circle2 = a * self.detect_blue(image) 
     circle3 = a * self.detect_green(image)
+
+    T_theta = [[math.cos(theta), -math.sin(theta), 0, 0],
+               [math.sin(theta), math.cos(theta), 0, 0],
+               [0, 0, 1, 0],
+               [0, 0, 0, 1]]
+    
+
+
+    
     ja1 = np.arctan2(center[0]- circle1[0], center[1] - circle1[1])
     ja2 = np.arctan2(circle1[0]-circle2[0], circle1[1]-circle2[1]) - ja1
     ja3 = np.arctan2(circle2[0]-circle3[0], circle2[1]-circle3[1]) - ja2 - ja1
@@ -112,7 +122,22 @@ class image_converter:
     except CvBridgeError as e:
       print(e)
 
-#///////////////////////////////////////////////////////
+# ////////////////////////////////////////////////////////////////
+ 
+# //////////////       INVERSE KINEMATICS         ////////////////
+
+def forward_kinematics(self, image):
+  joints = self.detect_joint_angles(image)
+  end_effector = np.array([3 * np.sin(joints[0]) + 
+                          3 * np.sin(joints[0] + joints[1]) + 3 * np.sin(joints.sum()),
+                          3 * np.cos(joints[0]) + 3 * np.cos(joints[0] + joints[1]) +
+                          3 * np.cos(joints.sum()))
+      
+  return end_effector
+
+  
+
+#////////////////////////////////////////////////////////////////
 # def callback(self,data):
 #     # Recieve the image
 #     try:
