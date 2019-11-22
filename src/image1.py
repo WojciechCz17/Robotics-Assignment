@@ -88,7 +88,7 @@ class image_converter:
     ja1 = np.arctan2(center[0]- circle1[0], center[1] - circle1[1])
     ja2 = np.arctan2(circle1[0]-circle2[0], circle1[1]-circle2[1]) - ja1
     ja3 = np.arctan2(circle1[0]-circle2[0], circle1[1]-circle2[1]) - ja1
-    ja4 = np.arctan2(circle2[0]-circle3[0], circle2[1]-circle3[1]) - ja2 - ja1
+    ja4 = np.arctan2(circle3[0]-circle4[0], circle3[1]-circle4[1]) - ja2 - ja1
     return np.array([ja1, ja2, ja3, ja4])
 
   def transformation(self, DH_params):
@@ -142,7 +142,6 @@ class image_converter:
     self.angles = self.detect_joint_angles(cv_image)
     self.joints = Float64MultiArray()
     self.joints.data = self.angles
-
 
     t01 = self.transformation([math.pi, 0, 2, self.angles[0]])
     t12 = self.transformation([0, 0, 0, self.angles[1]])
