@@ -18,10 +18,10 @@ class FK:
 
     def transformation(self, DH_params):
         # DH_params = [alpha, a, d, theta]
-        theta = DH_params[0]
-        alpha = DH_params[1]
-        a = DH_params[2]
-        d = DH_params[3]
+        # theta = DH_params[0]
+        # alpha = DH_params[1]
+        # a = DH_params[2]
+        # d = DH_params[3]
 
         trans_d = np.array([[1, 0, 0, 0],
                             [0, 1, 0, 0],
@@ -44,7 +44,7 @@ class FK:
                                 [0, 0, 0, 1]])
 
         T = np.dot(trans_d, np.dot(trans_theta, np.dot(trans_a, trans_alpha)))
-        
+
         return T
 
     def quick_trans(self, theta, alpha, a, d):
@@ -60,10 +60,10 @@ class FK:
         # return endPos
 def main():
     fk = FK()
-    T = fk.transformation([1, 0, 3, 0])
+    T = fk.transformation([math.pi, 2, 0, 1.2])
     print(T)
     # add 1 to p then remove 1 from p'
-    x = np.dot(T, [0, 0, 0, 0])
+    x = np.dot(T, [1.2, 0.8, 0.3, 0.7])
     x = x[:-1]
     print(x)
 

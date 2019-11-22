@@ -4,6 +4,7 @@ import roslib
 import sys
 import rospy
 import cv2
+import math
 import numpy as np
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
@@ -25,6 +26,8 @@ class image_converter:
     self.image_sub1 = rospy.Subscriber("/camera1/robot/image_raw",Image,self.callback1)
     # initialize the bridge between openCV and ROS
     self.bridge = CvBridge()
+    # initialize a publisher to send robot end-effector position
+    self.end_effector_pub = rospy.Publisher("end_effector_prediction",Float64MultiArray, queue_size=10)
 
     #//////////////////
 
@@ -119,35 +122,8 @@ class image_converter:
         
         return T
 
-  # def CalcuateRotationMatrix(theta) :
-     
-  #   Rx = np.array([[1,0,0 ],
-  #                   [0, math.cos(theta[1]), -math.sin(theta[1]) ],
-  #                   [0, math.sin(theta[1]), math.cos(theta[1])  ]
-  #                   ])
 
-  #    Rx2 = np.array([[1,         0,                  0                   ],
-  #                   [0,         math.cos(theta[3]), -math.sin(theta[3]) ],
-  #                   [0,         math.sin(theta[3]), math.cos(theta[3])  ]
-  #                   ])
-                     
-  #   Ry = np.array([[math.cos(theta[2]),    0,      math.sin(theta[2])  ],
-  #                   [0,                     1,      0                   ],
-  #                   [-math.sin(theta[2]),   0,      math.cos(theta[2])  ]
-  #                   ])
-                 
-  #   Rz = np.array([[math.cos(theta[0]),    -math.sin(theta[0]),    0],
-  #                   [math.sin(theta[0]),    math.cos(theta[0]),     0],
-  #                   [0,                     0,                      1]
-  #                   ])
-                     
-                     
-  #   R = np.dot(Rz, np.dot( Rx, np.dot ( Ry, Rx ))
- 
-  #   return R
-
-
-#////////////
+#////////////////////////////////////////////////////////
 
   # Recieve data from camera 1, process it, and publish
   def callback1(self,data):
@@ -160,18 +136,34 @@ class image_converter:
     # Uncomment if you want to save the image
     #cv2.imwrite('image_copy.png', cv_image)
 
-    a = self.detect_joint_angles(cv_image)
     cv2.imshow('window', cv_image)
     cv2.waitKey(3)
-
+    
+    self.angles = self.detect_joint_angles(cv_image)
     self.joints = Float64MultiArray()
-    self.joints.data = a
-    # Publish the results
+    self.joints.data = self.angles
 
-    for 
+
+    t01 = self.transformation([math.pi, 0, 2, self.angles[0]])
+    t12 = self.transformation([0, 0, 0, self.angles[1]])
+    t23 = self.transformation([0, 3, 0, self.angles[2]])
+    t34 = self.transformation([0, 2, 0, self.angles[3]])
+
+    self.t40 = Float64MultiArray()
+    self.t04 = np.dot(t01, np.dot(t12, np.dot(t23, t34))) # is this right order?
+    
+    self.end_effector=Float64MultiArray()
+    print(self.t04[0,3])
+    self.end_effector.data = [self.t04[0, 3], self.t04[1,3], self.t04[2,3]]
+
+    # Publish the results    
     try: 
+      # end = receive("/joints_pos", 5)
+      # end_vals = end.data
+
       self.image_pub1.publish(self.bridge.cv2_to_imgmsg(cv_image, "bgr8"))
       self.joints_pub.publish(self.joints)
+      self.end_effector_pub.publish(self.end_effector)
     except CvBridgeError as e:
       print(e)
 
