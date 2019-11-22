@@ -168,7 +168,6 @@ class image_converter:
     self.joints.data = a
     # Publish the results
 
-    for 
     try: 
       self.image_pub1.publish(self.bridge.cv2_to_imgmsg(cv_image, "bgr8"))
       self.joints_pub.publish(self.joints)
