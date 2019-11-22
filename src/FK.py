@@ -1,8 +1,8 @@
 #!/usr/bin/env python
+
 import math 
 import roslib
 import sys
-# import rospy
 import cv2
 import numpy as np
 from std_msgs.msg import String
@@ -28,13 +28,11 @@ class FK:
                             [0, 0, 1, 0],
                             [0,0, 0, 1]])
         
-        theta = DH_params[3]
         trans_theta = np.array([[math.cos(theta), -math.sin(theta), 0, 0],
                                 [math.sin(theta), math.cos(theta), 0, 0],
                                 [0, 0, 1, 0],
                                 [0, 0,0, 1]])
 
-        alpha = DH_params[0]
         trans_alpha = np.array([[1, 0, 0, 0],
                                 [0, math.cos(alpha), -math.sin(alpha), 0],
                                 [0, math.sin(alpha), math.cos(alpha), 0],
@@ -55,15 +53,19 @@ class FK:
         # endPos = a * (self.detect_yellow(image) - self.detect_red(image))
         # print(endPos)
         # return endPos
-
 def main():
     fk = FK()
-    T = fk.quick_trans(1, 0, 3, 0)
+    T = fk.transformation(1, 0, 3, 0)
     print(T)
-    x = np.dot([2, 8, 3], T)
+    # add 1 to p then remove 1 from p'
+    x = np.dot(T, [2, 8, 3, 1])
+    x = x[:-1]
     print(x)
-    print("HI")
 
+    # compute each transformation matrix and multiply together
+    # will put in dummy values for now 
+    # put the DH parameter table in
+    
 if __name__ == "__main__":
     main()
     
