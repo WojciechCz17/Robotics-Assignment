@@ -88,6 +88,37 @@ class image_converter:
     ja4 = np.arctan2(circle2[0]-circle3[0], circle2[1]-circle3[1]) - ja2 - ja1
     return np.array([ja1, ja2, ja3, ja4])
 
+  def transformation(self, DH_params):
+        # DH_params = [alpha, a, d, theta]
+        theta = DH_params[0]
+        alpha = DH_params[1]
+        a = DH_params[2]
+        d = DH_params[3]
+
+        trans_d = np.array([[1, 0, 0, 0],
+                            [0, 1, 0, 0],
+                            [0, 0, 1, a],
+                            [0, 0, 0, 1]])
+
+        trans_a = np.array([[1, 0, 0, alpha],
+                            [0, 1, 0, 0],
+                            [0, 0, 1, 0],
+                            [0,0, 0, 1]])
+        
+        trans_theta = np.array([[math.cos(theta), -math.sin(theta), 0, 0],
+                                [math.sin(theta), math.cos(theta), 0, 0],
+                                [0, 0, 1, 0],
+                                [0, 0,0, 1]])
+
+        trans_alpha = np.array([[1, 0, 0, 0],
+                                [0, math.cos(alpha), -math.sin(alpha), 0],
+                                [0, math.sin(alpha), math.cos(alpha), 0],
+                                [0, 0, 0, 1]])
+
+        T = np.dot(trans_d, np.dot(trans_theta, np.dot(trans_a, trans_alpha)))
+        
+        return T
+
   # def CalcuateRotationMatrix(theta) :
      
   #   Rx = np.array([[1,0,0 ],
@@ -136,6 +167,8 @@ class image_converter:
     self.joints = Float64MultiArray()
     self.joints.data = a
     # Publish the results
+
+    for 
     try: 
       self.image_pub1.publish(self.bridge.cv2_to_imgmsg(cv_image, "bgr8"))
       self.joints_pub.publish(self.joints)

@@ -10,13 +10,18 @@ from sensor_msgs.msg import Image
 from std_msgs.msg import Float64MultiArray, Float64
 from cv_bridge import CvBridge, CvBridgeError
 
+# take transformation matrix for 0-joint. The last column gives co-ords of joint
 
 class FK:
     def __init__(self):
         self.thing = 1
 
-    def transformation(self, theta, alpha, a, d):
+    def transformation(self, DH_params):
         # DH_params = [alpha, a, d, theta]
+        theta = DH_params[0]
+        alpha = DH_params[1]
+        a = DH_params[2]
+        d = DH_params[3]
 
         trans_d = np.array([[1, 0, 0, 0],
                             [0, 1, 0, 0],
@@ -55,13 +60,17 @@ class FK:
         # return endPos
 def main():
     fk = FK()
-    T = fk.transformation(1, 0, 3, 0)
+    T = fk.transformation([1, 0, 3, 0])
     print(T)
     # add 1 to p then remove 1 from p'
-    x = np.dot(T, [2, 8, 3, 1])
+    x = np.dot(T, [0, 0, 0, 0])
     x = x[:-1]
     print(x)
 
+    # DH_params = [[]]
+
+    # for i in range(0,4):
+    #     theta = 
     # compute each transformation matrix and multiply together
     # will put in dummy values for now 
     # put the DH parameter table in
